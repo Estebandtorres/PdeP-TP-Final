@@ -2,6 +2,9 @@ import { Tarea } from "./Tarea";
 import { ESTADO } from "../lib/constantes";
 import { mostrarDificultad } from "../lib/funciones";
 
+
+// Colección de tareas con operaciones comunes (agregar, eliminar, ordenar y estadísticas).
+
 export class ToDoList {
     private tareas: Tarea[];
 
@@ -9,38 +12,50 @@ export class ToDoList {
         this.tareas = [];
     }
 
-    getTareas(): Tarea[] { return this.tareas; }
-    setTareas(tareas: Tarea[]): void { this.tareas = tareas; }
-    getUnaTarea(id: string): Tarea { return this.tareas.find(t => t.getId() === id)!; }
+    getTareas(): Tarea[] { return this.tareas.slice(); }
+    setTareas(tareas: Tarea[]): void { this.tareas = tareas.slice(); }
 
+    // Devuelve la tarea con el id dado o lanza un Error si no existe
+    getUnaTarea(id: string): Tarea {
+        const found = this.tareas.find(t => t.getId() === id);
+        if (!found) throw new Error(`Tarea no encontrada: ${id}`);
+        return found;
+    }
+
+    // Agrega una tarea a la lista
     agregarTarea(tarea: Tarea): void {
-        this.tareas[this.tareas.length] = tarea;
+        this.tareas.push(tarea);
     }
 
-
+    // Filtra tareas por índice de estado (correspondiente a Estado)
     arrayFiltrarPorEstado(idEstado: number): Tarea[] {
-        let arregloAuxiliar: Tarea[] = [];
-        for (let tarea of this.tareas) {
-            if (tarea.getEstado() === ESTADO[idEstado]) {
-                arregloAuxiliar[arregloAuxiliar.length] = tarea;
-            }
+        if (typeof idEstado !== 'number' || idEstado < 0 || idEstado >= ESTADO.length) return [];
+        const estadoBuscado = ESTADO[idEstado];
+        const resultado: Tarea[] = [];
+        for (const tarea of this.tareas) {
+            if (tarea.getEstado() === estadoBuscado) resultado.push(tarea);
         }
-        return arregloAuxiliar;
+        return resultado;
     }
 
+    // Muestra por consola los detalles de una tarea
     mostrarDetallesDeTarea(idTarea: string): void {
-        const tarea = this.getUnaTarea(idTarea);
-        console.log('--------------------------------------------------------------------');
-        console.log('                         Detalles de la Tarea');
-        console.log('--------------------------------------------------------------------');
-        console.log(`\nTítulo: ${tarea.getTitulo()}`);
-        console.log(`Descripción: ${tarea.getDescripcion()}`);
-        console.log(`Prioridad: ${tarea.getPrioridad()}`);
-        console.log(`Estado: ${tarea.getEstado()}`);
-        console.log(`Fecha de Creación: ${tarea.getFechaCreacion().toLocaleDateString()}`);
-        console.log(`Fecha de Vencimiento: ${tarea.getFechaVencimiento().toLocaleDateString()}`);
-        console.log(`Dificultad: ${mostrarDificultad(tarea.getDificultad())}`);
-        console.log('\n--------------------------------------------------------------------\n');
+        try {
+            const tarea = this.getUnaTarea(idTarea);
+            console.log('--------------------------------------------------------------------');
+            console.log('                         Detalles de la Tarea');
+            console.log('--------------------------------------------------------------------');
+            console.log(`\nTítulo: ${tarea.getTitulo()}`);
+            console.log(`Descripción: ${tarea.getDescripcion()}`);
+            console.log(`Prioridad: ${tarea.getPrioridad()}`);
+            console.log(`Estado: ${tarea.getEstado()}`);
+            console.log(`Fecha de Creación: ${tarea.getFechaCreacion().toLocaleDateString()}`);
+            console.log(`Fecha de Vencimiento: ${tarea.getFechaVencimiento().toLocaleDateString()}`);
+            console.log(`Dificultad: ${mostrarDificultad(tarea.getDificultad())}`);
+            console.log('\n--------------------------------------------------------------------\n');
+        } catch (e) {
+            console.error('No se puede mostrar detalles: ', (e as Error).message);
+        }
     }
 
     eliminarTarea(id: string): boolean {
