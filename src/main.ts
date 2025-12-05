@@ -15,6 +15,7 @@ function menuPrincipal(): void {
     console.log('[2] Agregar tarea');
     console.log('[3] Buscar tarea');
     console.log('[4] Eliminar tarea');
+    console.log('[5] Ordenar tareas');
     console.log('[0] Salir\n');
     console.log('----------------------------------\n');
     console.log('Ingrese una opción.\n');
@@ -38,6 +39,7 @@ interface TareaJSON {
     prioridad: string;
     estado: string;
     id?: string;
+    dificultad?: number;
     fechaCreacion: string;
     fechaUltimaEdicion: string;
     fechaVencimiento: string;
@@ -89,6 +91,7 @@ async function cargarTareasDesdeArchivo(): Promise<Tarea[]> {
                 fechaVencimiento,
                 fechaUltimaEdicion
                 , item.id
+                , (item as any).dificultad
             );
             
             tareasConvertidas.push(nuevaTarea);
@@ -111,6 +114,7 @@ async function guardarTareasEnArchivo(listaTareas: Tarea[]): Promise<void> {
                 descripcion: unaTarea.getDescripcion(),
                 prioridad: unaTarea.getPrioridad(),
                 estado: unaTarea.getEstado(),
+                dificultad: unaTarea.getDificultad(),
                 fechaCreacion: unaTarea.getFechaCreacion() ? unaTarea.getFechaCreacion().toISOString() : null,
                 fechaUltimaEdicion: unaTarea.getFechaUltimaEdicion() ? unaTarea.getFechaUltimaEdicion().toISOString() : null,
                 fechaVencimiento: unaTarea.getFechaVencimiento() ? unaTarea.getFechaVencimiento().toISOString() : null
@@ -531,6 +535,24 @@ async function main(): Promise<void> {
                     }
                 } while (!esValidoElDato);
 
+                // Pedir dificultad (1-5)
+                esValidoElDato = false;
+                let dificultadNuevaTarea: number = 3;
+                do {
+                    console.clear();
+                    console.log("Ingrese la dificultad de la nueva tarea (1-5). 1=fácil, 5=muy difícil\n");
+                    const entrada = await input('> ');
+                    const valor = parseInt(entrada, 10);
+                    if (isNaN(valor) || valor < 1 || valor > 5) {
+                        console.log("\nValor no válido. Intente nuevamente.\n");
+                        await input('Presione "Enter" para continuar...');
+                        continue;
+                    } else {
+                        dificultadNuevaTarea = valor;
+                        esValidoElDato = true;
+                    }
+                } while (!esValidoElDato);
+
                 esValidoElDato = false;
 
                 do {
@@ -609,7 +631,9 @@ async function main(): Promise<void> {
                     ESTADO[estadoNuevaTarea - 1],
                     hoy,
                     new Date(fechaToString(anioNuevaTarea, mesNuevaTarea, diaNuevaTarea) + "T03:00:00Z"), // UTC-3
-                    hoy
+                    hoy,
+                    undefined,
+                    dificultadNuevaTarea
                 );
 
                 miToDoList.agregarTarea(nuevaTarea);
@@ -707,6 +731,60 @@ async function main(): Promise<void> {
                     }
 
                     await input('Presione "Enter" para continuar...');
+                    console.clear();
+                }
+                break;
+            case 5:
+                // Ordenar tareas
+                {
+                    console.clear();
+
+                    if (miToDoList.getTareas().length === 0) {
+                        console.log("No hay tareas cargadas.\n");
+                        await input('Presione "Enter" para continuar...');
+                        console.clear();
+                        break;
+                    }
+
+                    console.log('Ordenar por:\n');
+                    console.log('[1] Título');
+                    console.log('[2] Fecha de Vencimiento');
+                    console.log('[3] Fecha de Creación');
+                    console.log('[4] Dificultad\n');
+                    let opcionOrden: number = parseInt(await input('> '), 10);
+                    let criterio: 'titulo' | 'fechaVencimiento' | 'fechaCreacion' | 'dificultad' = 'titulo';
+                    switch (opcionOrden) {
+                        case 1: criterio = 'titulo'; break;
+                        case 2: criterio = 'fechaVencimiento'; break;
+                        case 3: criterio = 'fechaCreacion'; break;
+                        case 4: criterio = 'dificultad'; break;
+                        default:
+                            console.log('\nOpción no válida. Volviendo al menú.\n');
+                            await input('Presione "Enter" para continuar...');
+                            console.clear();
+                            break;
+                    }
+
+                    // Si opción inválida ya hizo break; verificar
+                    if (![1,2,3,4].includes(opcionOrden)) break;
+
+                    console.clear();
+                    console.log('Orden:\n');
+                    console.log('[1] Ascendente');
+                    console.log('[2] Descendente\n');
+                    const opcionAsc = parseInt(await input('> '), 10);
+                    const asc = opcionAsc === 1;
+
+                    miToDoList.ordenarPor(criterio, asc);
+                    await guardarTareasEnArchivo(miToDoList.getTareas());
+
+                    console.log(`\nTareas ordenadas por ${criterio} (${asc ? 'ascendente' : 'descendente'}).\n`);
+                    console.log('Lista resultante:\n');
+                    for (let tarea of miToDoList.getTareas()) {
+                        console.log(`[${tarea.getId()}] - ${tarea.getTitulo()} - Vencimiento: ${tarea.getFechaVencimiento().toLocaleDateString()} - Dificultad: ${tarea.getDificultad()}`);
+                    }
+
+                    await input('\nPresione "Enter" para continuar...');
                     console.clear();
                 }
                 break;

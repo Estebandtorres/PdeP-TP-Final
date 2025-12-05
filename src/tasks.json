@@ -1,30 +1,11 @@
 [
     {
-        "id": "4545162c-9ec4-4105-b26c-98162fbc0fa2",
-        "titulo": "Preparar presentación",
-        "descripcion": "Crear diapositivas para la reunión del lunes",
-        "prioridad": "Baja",
-        "estado": "en progreso",
-        "fechaCreacion": "2025-12-05T03:00:00.000Z",
-        "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
-        "fechaVencimiento": "2025-12-05T03:46:52.244Z"
-    },
-    {
         "id": "05dce8f8-73c1-441c-9200-ff660becea1b",
         "titulo": "Hacer ejercicio",
         "descripcion": "Ir al gimnasio por la tarde",
         "prioridad": "Alta",
         "estado": "completada",
-        "fechaCreacion": "2025-12-05T03:00:00.000Z",
-        "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
-        "fechaVencimiento": "2025-12-05T03:46:52.244Z"
-    },
-    {
-        "id": "c891d0ae-dedf-4f2d-a4b1-10267e509d13",
-        "titulo": "Leer un libro",
-        "descripcion": "Terminar de leer 'El Principito'",
-        "prioridad": "Alta",
-        "estado": "cancelada",
+        "dificultad": 3,
         "fechaCreacion": "2025-12-05T03:00:00.000Z",
         "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
         "fechaVencimiento": "2025-12-05T03:46:52.244Z"
@@ -35,9 +16,32 @@
         "descripcion": "aprendiendo html",
         "prioridad": "Media",
         "estado": "pendiente",
+        "dificultad": 3,
         "fechaCreacion": "2025-12-05T03:00:00.000Z",
         "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
         "fechaVencimiento": "2025-12-10T03:00:00.000Z"
+    },
+    {
+        "id": "c891d0ae-dedf-4f2d-a4b1-10267e509d13",
+        "titulo": "Leer un libro",
+        "descripcion": "Terminar de leer 'El Principito'",
+        "prioridad": "Alta",
+        "estado": "cancelada",
+        "dificultad": 3,
+        "fechaCreacion": "2025-12-05T03:00:00.000Z",
+        "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
+        "fechaVencimiento": "2025-12-05T03:46:52.244Z"
+    },
+    {
+        "id": "4545162c-9ec4-4105-b26c-98162fbc0fa2",
+        "titulo": "Preparar presentación",
+        "descripcion": "Crear diapositivas para la reunión del lunes",
+        "prioridad": "Baja",
+        "estado": "en progreso",
+        "dificultad": 3,
+        "fechaCreacion": "2025-12-05T03:00:00.000Z",
+        "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
+        "fechaVencimiento": "2025-12-05T03:46:52.244Z"
     },
     {
         "id": "0e8c066c-ef9d-48ff-befc-6f30ad00d4c2",
@@ -45,6 +49,7 @@
         "descripcion": "esta tarea esta chingona",
         "prioridad": "Alta",
         "estado": "pendiente",
+        "dificultad": 3,
         "fechaCreacion": "2025-12-05T03:00:00.000Z",
         "fechaUltimaEdicion": "2025-12-05T03:00:00.000Z",
         "fechaVencimiento": "2025-12-20T03:00:00.000Z"

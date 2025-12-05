@@ -11,10 +11,11 @@ export class Tarea {
     private _fechaCreacion: Date;
     private _fechaVencimiento: Date;
     private _fechaUltimaEdicion: Date;
+    private _dificultad: number;
 
     // ----------------------------------------- Constructor -----------------------------------------
 
-    constructor(_titulo: string, _descripcion: string, _prioridad: typeof PRIORIDAD[number], _estado: typeof ESTADO[number], _fechaCreacion: Date | null, _fechaVencimiento: Date, _fechaUltimaEdicion: Date | null, id?: string) {
+    constructor(_titulo: string, _descripcion: string, _prioridad: typeof PRIORIDAD[number], _estado: typeof ESTADO[number], _fechaCreacion: Date | null, _fechaVencimiento: Date, _fechaUltimaEdicion: Date | null, id?: string, dificultad?: number) {
         let day: Date = new Date();
         this._titulo = _titulo;
         this._descripcion = _descripcion;
@@ -41,6 +42,12 @@ export class Tarea {
         } else {
             this._fechaUltimaEdicion = new Date(_fechaUltimaEdicion);
         }
+        // Dificultad: valor numérico (por ejemplo 1-5). Si no se provee, usar 3 por defecto.
+        if (typeof dificultad === 'number' && !isNaN(dificultad)) {
+            this._dificultad = dificultad;
+        } else {
+            this._dificultad = 3;
+        }
         
     }
 
@@ -54,6 +61,7 @@ export class Tarea {
     setEstado(estado: typeof ESTADO[number]): void { this._estado = estado; }
     setFechaVencimiento(fechaVencimiento: Date): void { this._fechaVencimiento = fechaVencimiento; }
     setFechaUltimaEdicion(fechaUltimaEdicion: Date): void { this._fechaUltimaEdicion = fechaUltimaEdicion }
+    setDificultad(dificultad: number): void { this._dificultad = dificultad; }
 
     // ----------------------------------------- Getters -----------------------------------------
 
@@ -65,6 +73,7 @@ export class Tarea {
     getFechaCreacion(): Date { return this._fechaCreacion; }
     getFechaVencimiento(): Date { return this._fechaVencimiento; }
     getFechaUltimaEdicion(): Date { return this._fechaUltimaEdicion; }
+    getDificultad(): number { return this._dificultad; }
 
 }
 

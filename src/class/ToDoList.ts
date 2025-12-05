@@ -48,4 +48,22 @@ export class ToDoList {
         this.tareas.splice(index, 1);
         return true;
     }
+
+    ordenarPor(criterio: 'titulo' | 'fechaVencimiento' | 'fechaCreacion' | 'dificultad', asc: boolean = true): void {
+        const factor = asc ? 1 : -1;
+        this.tareas.sort((a, b) => {
+            switch (criterio) {
+                case 'titulo':
+                    return factor * a.getTitulo().localeCompare(b.getTitulo(), undefined, { sensitivity: 'base' });
+                case 'fechaVencimiento':
+                    return factor * (a.getFechaVencimiento().getTime() - b.getFechaVencimiento().getTime());
+                case 'fechaCreacion':
+                    return factor * (a.getFechaCreacion().getTime() - b.getFechaCreacion().getTime());
+                case 'dificultad':
+                    return factor * (a.getDificultad() - b.getDificultad());
+                default:
+                    return 0;
+            }
+        });
+    }
 }
